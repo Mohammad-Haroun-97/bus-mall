@@ -1,0 +1,28 @@
+
+#rightImage{
+    width: 30%;
+    height: 300px;
+    border-style: double;
+}
+
+ #middleImage{
+    width: 30%;
+    height: 300px;
+    border-style: double;
+}
+
+ 
+#leftImage{
+    width: 30%;
+    height: 300px;
+    border-style: double;
+}
+
+
+#button{
+    width: 250px;
+    height: 80px;
+    margin-left: 40%;
+    font-size: larger;
+    
+}
