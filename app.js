@@ -4,19 +4,19 @@
 let rightImageElement = document.getElementById('rightImage')
 let middleImageElement = document.getElementById('middleImage')
 let leftImageElement = document.getElementById('leftImage')
-
 let buttonElement = document.getElementById('button')
+let myChart = document.getElementById('myChart')
 
 
-
-
-
-let products = [];
-
+Product.total = [];
+// let Product.total = [];
+let namesArr = [];
+let shownArr = [];
+let votesArr = [];
 
 function Random() {
 
-    return (Math.floor(Math.random() * products.length))
+    return (Math.floor(Math.random() * Product.total.length))
 };
 
 let rightIndex;
@@ -29,13 +29,15 @@ function Product(name, src) {
     this.name = name;
     this.src = src;
     this.votes = 0,
+        this.times = 0;
 
-     this.times = 0;
+    namesArr.push(this.name)
 
-    products.push(this);
+    Product.total.push(this);
 
 
 }
+// console.log(namesArr);
 
 
 new Product('bag', 'img/bag.jpg')
@@ -58,34 +60,68 @@ new Product('unicorn', 'img/unicorn.jpg')
 new Product('water-can', 'img/water-can.jpg')
 new Product('wine-glass', 'img/wine-glass.jpg')
 
-console.log(products);
+// console.log(Product.total);
 
 
-
+// let initialArray =[];
 
 function render() {
+    
+    let secondtrial = [];
 
-    rightIndex = Random();
+
     leftIndex = Random();
     middleIndex = Random();
+    rightIndex = Random();
+    
+    
+
+    
+
+    
+
 
     while (rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex) {
         rightIndex = Random();
         leftIndex = Random();
-    }
+        middleIndex = Random();
+
+        
+    };
+
+    const initialArray = [rightIndex, leftIndex, middleIndex];
+
+    
+    do {rightIndex=Random();
+        leftIndex=Random();
+        middleIndex=Random();
+        
+    } while (initialArray.includes(secondtrial) ||rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex);
+    
 
 
-    rightImageElement.src = products[rightIndex].src
-    leftImageElement.src = products[leftIndex].src
-    middleImageElement.src = products[middleIndex].src
+    
 
-    products[rightIndex].times++;
-    products[middleIndex].times++;
-    products[leftIndex].times++;
 
+
+
+
+    rightImageElement.src = Product.total[rightIndex].src
+    leftImageElement.src = Product.total[leftIndex].src
+    middleImageElement.src = Product.total[middleIndex].src
+
+    Product.total[rightIndex].times++;
+    Product.total[middleIndex].times++;
+    Product.total[leftIndex].times++;
+
+    // numbersArr = [rightIndex, leftIndex, middleIndex];
+
+
+    secondtrial= [rightIndex,leftIndex,middleIndex]
 
 }
 render();
+
 
 
 rightImageElement.addEventListener('click', show)
@@ -98,7 +134,7 @@ let maxtrials = 25;
 function show(event) {
 
 
-    
+
     console.log(initialtrial);
     console.log(maxtrials);
 
@@ -107,78 +143,179 @@ function show(event) {
 
         if (event.target.id === 'rightImage') {
 
-            products[rightIndex].votes++;
-            console.log(products[rightIndex]);
+            Product.total[rightIndex].votes++;
+            // console.log(Product.total[rightIndex]);
 
         }
 
 
 
-        if (event.target.id === 'leftImage') {
-            products[leftIndex].votes++;
-            console.log(products[leftIndex]);
+        else if (event.target.id === 'leftImage') {
+            Product.total[leftIndex].votes++;
+            console.log(Product.total[leftIndex]);
 
         }
 
-        if (event.target.id === 'middleImage') {
-            
-        
-            products[middleIndex].votes++;
-            console.log(products[middleIndex]);
+        else if (event.target.id === 'middleImage') {
+
+
+            Product.total[middleIndex].votes++;
+            console.log(Product.total[middleIndex]);
 
         }
         initialtrial++;
-        
+
 
 
 
 
         render();
 
-    } 
+    }
 
-    
-    if (initialtrial==maxtrials) {
-        
+
+
+
+    // else (initialtrial == maxtrials) {
+    else {
+
         leftImageElement.removeEventListener('click', show);
         rightImageElement.removeEventListener('click', show);
         middleImageElement.removeEventListener('click', show);
 
-        buttonElement.addEventListener('click',finish)
+        buttonElement.addEventListener('click', finish)
 
         function finish() {
             let result = document.getElementById('result');
 
-        for (let i = 0; i < products.length; i++) {
+            for (let i = 0; i < Product.total.length; i++) {
 
-            let elements = document.createElement('li');
+                let elements = document.createElement('li');
 
-            result.appendChild(elements);
+                result.appendChild(elements);
 
-            elements.textContent = `${products[i].name} has ${products[i].votes} votes and has been seen ${products[i].times} times `
+                elements.textContent = `${Product.total[i].name} has ${Product.total[i].votes} votes and has been seen ${Product.total[i].times} times `
+
+            }
+
+
+
+
+            buttonElement.removeEventListener('click', finish);
+
+            for (let i = 0; i < Product.total.length; i++) {
+                console.log(Product.total[i].votes);
+                votesArr.push(Product.total[i].votes);
+                shownArr.push(Product.total[i].times);
+
+            }
+            console.log(shownArr);
+
+
+
+            showChart();
+
+
+
 
         }
 
-        // remove event listener:
-       
-        buttonElement.removeEventListener('click',finish);
-        
 
-            
-        }
 
-        
 
-        
+
+
+
+
     }
 }
 
-        
-      
+
+function showChart() {
+
+    const data = {
+        labels: namesArr,
+        datasets: [{
+            label: 'Votes',
+            data: votesArr,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'Shown',
+            data: shownArr,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }
+
+        ]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Bar Chart'
+                }
+            }
+        },
+    };
+
+
+    myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+
+}
 
 
 
-    
+
+
+
+
 
 
 
