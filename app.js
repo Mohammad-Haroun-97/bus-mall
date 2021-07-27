@@ -29,13 +29,46 @@ function Product(name, src) {
     this.name = name;
     this.src = src;
     this.votes = 0,
-        this.times = 0;
+    this.times = 0;
 
     namesArr.push(this.name)
 
     Product.total.push(this);
+    
 
 
+}
+
+
+function updateStorage() {
+
+    let stringArray = JSON.stringify(Product.total )
+
+    localStorage.setItem('product',stringArray)
+    
+}
+
+function getOldStorage() {
+
+    let data = localStorage.getItem('product')
+
+    let parsedArray=JSON.parse(data)
+
+if (parsedArray !==null) {
+
+    // parsedArray == Product.total;
+    // for (let i = 0; i < parsedArray.length; i++) {
+
+        Product.total = parsedArray;
+
+        // new Product(parsedArray[i].name, parsedArray[i].src)
+        
+    
+
+}
+render();
+
+    
 }
 // console.log(namesArr);
 
@@ -63,16 +96,22 @@ new Product('wine-glass', 'img/wine-glass.jpg')
 // console.log(Product.total);
 
 
-// let initialArray =[];
 
+let initialArray =[];
 function render() {
     
-    let secondtrial = [];
+    
+    console.log('before',initialArray);
 
 
     leftIndex = Random();
+    console.log('leftIndex',leftIndex);
+
     middleIndex = Random();
+    console.log('middleIndex',middleIndex);
+
     rightIndex = Random();
+    console.log('rightIndex',rightIndex);
     
     
 
@@ -81,28 +120,29 @@ function render() {
     
 
 
-    while (rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex) {
-        rightIndex = Random();
-        leftIndex = Random();
-        middleIndex = Random();
+    // while (rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex) {
+    //     rightIndex = Random();
+    //     leftIndex = Random();
+    //     middleIndex = Random();
 
         
-    };
+    // };
 
-    const initialArray = [rightIndex, leftIndex, middleIndex];
+    // const initialArray = [rightIndex, leftIndex, middleIndex];
 
     
     do {rightIndex=Random();
         leftIndex=Random();
         middleIndex=Random();
         
-    } while (initialArray.includes(secondtrial) ||rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex);
+    } while (initialArray.includes(rightIndex) ||initialArray.includes(leftIndex) ||initialArray.includes(middleIndex)||rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex);
     
 
 
     
 
-
+    initialArray= [rightIndex,leftIndex,middleIndex]
+    console.log('after',initialArray);
 
 
 
@@ -117,7 +157,8 @@ function render() {
     // numbersArr = [rightIndex, leftIndex, middleIndex];
 
 
-    secondtrial= [rightIndex,leftIndex,middleIndex]
+    
+    
 
 }
 render();
@@ -207,8 +248,11 @@ function show(event) {
                 console.log(Product.total[i].votes);
                 votesArr.push(Product.total[i].votes);
                 shownArr.push(Product.total[i].times);
+                
 
             }
+            updateStorage();
+            
             console.log(shownArr);
 
 
@@ -219,6 +263,8 @@ function show(event) {
 
 
         }
+
+        
 
 
 
@@ -317,5 +363,5 @@ function showChart() {
 
 
 
-
+getOldStorage();
 
