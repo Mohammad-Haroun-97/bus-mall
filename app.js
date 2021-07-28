@@ -131,11 +131,13 @@ function render() {
     // const initialArray = [rightIndex, leftIndex, middleIndex];
 
     
-    do {rightIndex=Random();
-        leftIndex=Random();
-        middleIndex=Random();
+   while (initialArray.includes(rightIndex) ||initialArray.includes(leftIndex) ||initialArray.includes(middleIndex)||rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex)
+  
+   {rightIndex=Random();
+    leftIndex=Random();
+    middleIndex=Random();
         
-    } while (initialArray.includes(rightIndex) ||initialArray.includes(leftIndex) ||initialArray.includes(middleIndex)||rightIndex == leftIndex || middleIndex == rightIndex || middleIndex == leftIndex);
+    };
     
 
 
@@ -223,8 +225,19 @@ function show(event) {
         leftImageElement.removeEventListener('click', show);
         rightImageElement.removeEventListener('click', show);
         middleImageElement.removeEventListener('click', show);
-
         buttonElement.addEventListener('click', finish)
+        
+        for (let i = 0; i < Product.total.length; i++) {
+            console.log(Product.total[i].votes);
+            votesArr.push(Product.total[i].votes);
+            shownArr.push(Product.total[i].times);
+            
+
+        }
+        showChart();
+
+
+        
 
         function finish() {
             let result = document.getElementById('result');
@@ -239,39 +252,23 @@ function show(event) {
 
             }
 
+            
 
+            
 
 
             buttonElement.removeEventListener('click', finish);
 
-            for (let i = 0; i < Product.total.length; i++) {
-                console.log(Product.total[i].votes);
-                votesArr.push(Product.total[i].votes);
-                shownArr.push(Product.total[i].times);
-                
-
-            }
+          
             updateStorage();
             
             console.log(shownArr);
 
 
 
-            showChart();
-
-
-
-
         }
 
         
-
-
-
-
-
-
-
 
     }
 }
